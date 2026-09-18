@@ -27,9 +27,12 @@ python src/01_build_panel.py              # rebuild the panel from raw sources (
 python src/03_spatial_conformal.py        # implementation self-test on synthetic data
 python src/04_run_frozen_analysis.py --dry-run
 python src/04_run_frozen_analysis.py --real   # requires PREREG_SUBMITTED.txt (see below)
-python src/05_make_figures.py
+python src/05_make_figures.py                 # Figures 1 and 3
 python src/06_sensitivity_analyses.py
+python src/07_contour_maps.py                 # Figures 2 and 4 (contour maps; Figure 4
+                                              #   requires the standard base map file)
 python src/09_gp_parameter_diagnostics.py
+python src/10_georeference_stdmap.py          # optional: re-derive the base-map georeference
 ```
 
 `04_run_frozen_analysis.py --real` refuses to run unless a file named
