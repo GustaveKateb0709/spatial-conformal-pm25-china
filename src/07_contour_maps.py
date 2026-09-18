@@ -161,63 +161,73 @@ def fig2():
     plt.close(fig)
     print("  ✅ Fig2_yrd_pm25_contour")
 
-STD_MAP = os.path.join(ROOT, "data", "raw", "stdmap_GS2019_1838.jpg")
-V2 = np.load(os.path.join(ROOT, "data", "stdmap_transform_v2.npz"))
-V2P = V2["params"]; V2NEAT = V2["neatline"]; V2INSET = dict(x0=float(V2["inset"][0]), y0=float(V2["inset"][1]))
+# ==== Fig 4: national contour map (GADM boundaries incl. Taiwan) ====
+def load_twn_outline():
+    z = zipfile.ZipFile(TWN)
+    gj = json.loads(z.read("gadm41_TWN_0.json"))
+    polys = []
+    for f in gj["features"]:
+        g = f["geometry"]
+        if g["type"] == "Polygon":
+            polys.append(np.array(g["coordinates"][0]))
+        elif g["type"] == "MultiPolygon":
+            for pp in g["coordinates"]:
+                polys.append(np.array(pp[0]))
+    return polys
 
-def to_px_v2(LON, LAT):
-    """lon/lat -> standard-base-map pixel coordinates (12-param quadratic, v2)."""
-    LON = np.asarray(LON, float); LAT = np.asarray(LAT, float)
-    a0, a1, a2, a3, a4, a5, b0, b1, b2, b3, b4, b5 = V2P
-    PX = a0 + a1*LON + a2*LAT + a3*LON*LAT + a4*LON*LON + a5*LAT*LAT
-    PY = b0 + b1*LON + b2*LAT + b3*LON*LAT + b4*LON*LON + b5*LAT*LAT
-    return PX, PY
-
-# ==== Fig 4 candidate: contour field on the official standard base map ====
 def fig4():
-    """PM2.5 contour field overlaid on the standard national base map
-    (GS(2019)1838, reproduced without modification) """
-    from PIL import Image
-    img = Image.open(STD_MAP)
-    lon, lat, pm = read_nc_region((73.0, 135.5), (17.0, 54.0))
-    LON, LAT = np.meshgrid(lon, lat)
-    PX, PY = to_px_v2(LON, LAT)
+    lon, lat, pm = read_nc_region((73.0, 136.0), (17.0, 54.0))
+    all_prov = load_gadm_provinces()
+    twn = load_twn_outline()
 
-    inside = ((PX > V2NEAT[0] + 4) & (PX < V2NEAT[1] - 4) &
-              (PY > V2NEAT[2] + 4) & (PY < V2NEAT[3] - 4))
-    inside &= ~((PX > V2INSET["x0"]) & (PY > V2INSET["y0"]))
-    PM = np.ma.masked_where(~inside, pm)
-
-    fig, ax = plt.subplots(1, 1, figsize=(10, 6.72))
-    ax.imshow(np.array(img), aspect="equal", zorder=1)
+    fig, ax = plt.subplots(1, 1, figsize=(9.0, 7.0))
 
     levels = np.arange(5, 85, 2.5)
-    cf = ax.contourf(PX, PY, PM, levels=levels, cmap="YlOrRd", extend="both",
-                     alpha=0.72, zorder=2)
+    cf = ax.contourf(lon, lat, pm, levels=levels, cmap="YlOrRd", extend="both", zorder=1)
+
+    # province borders
+    for prov, polys in all_prov.items():
+        for poly in polys:
+            if poly.ndim == 2 and poly.shape[1] >= 2:
+                ax.plot(poly[:, 0], poly[:, 1], color="#888888", lw=0.4, zorder=2)
+    # Taiwan boundary (GADM TWN)
+    for poly in twn:
+        ax.plot(poly[:, 0], poly[:, 1], color="#888888", lw=0.4, zorder=2)
+
+    # label selected provinces only (avoid crowding)
+    labels = {"Beijing":"Beijing", "Shanghai":"Shanghai", "Guangdong":"Guangdong", "Sichuan":"Sichuan",
+              "Xinjiang Uygur":"Xinjiang", "Xizang":"Xizang", "Heilongjiang":"Heilongjiang",
+              "Yunnan":"Yunnan", "Hunan":"Hunan", "Jiangsu":"Jiangsu"}
+    for prov, polys in all_prov.items():
+        if prov not in labels: continue
+        all_pts = np.vstack(polys)
+        clon, clat = all_pts[:, 0].mean(), all_pts[:, 1].mean()
+        ax.text(clon, clat, labels[prov], fontsize=7, ha="center", va="center",
+                color=INK, fontweight="bold", zorder=5,
+                path_effects=[pe.withStroke(linewidth=2.0, foreground="white")])
+    twn_pts = np.vstack(twn)
+    ax.text(twn_pts[:, 0].mean() + 1.2, twn_pts[:, 1].mean() - 0.4, "Taiwan",
+            fontsize=7, ha="center", va="center", color=INK, fontweight="bold", zorder=5,
+            path_effects=[pe.withStroke(linewidth=2.0, foreground="white")])
+
+    # north arrow
+    draw_north_arrow(ax)
+    # scale bar
+    draw_scale_bar(ax, length_km=500)
 
     cbar = fig.colorbar(cf, ax=ax, shrink=0.8, pad=0.02, aspect=25)
-    cbar.set_label("PM2.5 (\u00b5g/m\u00b3)", fontsize=8)
+    cbar.set_label("PM2.5 (µg/m³)", fontsize=8)
     cbar.ax.tick_params(labelsize=7)
 
-    draw_north_arrow(ax, x=0.955, y=0.965)
-
-    x1, y1 = to_px_v2(np.array([110.0]), np.array([35.0]))
-    x2, y2 = to_px_v2(np.array([110.0 + 500.0 / (111.32 * np.cos(np.deg2rad(35.0)))]),
-                      np.array([35.0]))
-    x1, y1, x2, y2 = float(x1[0]), float(y1[0]), float(x2[0]), float(y2[0])
-    ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                arrowprops=dict(arrowstyle="<->", color=INK, lw=1.2))
-    ax.text((x1 + x2) / 2, (y1 + y2) / 2 + 26, "500 km",
-            fontsize=8, ha="center", va="bottom", color=INK, fontweight="bold")
-
-    ax.set_xlim(0, img.width); ax.set_ylim(img.height, 0); ax.axis("off")
+    ax.set_xlabel("Longitude (°E)", fontsize=8)
+    ax.set_ylabel("Latitude (°N)", fontsize=8)
+    ax.set_facecolor("#D0E0F0")  # light blue for the sea
 
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "Fig4 National PM2.5 Contour.png"), dpi=300, bbox_inches="tight", pad_inches=0.1)
     fig.savefig(os.path.join(OUT, "Fig4 National PM2.5 Contour.pdf"), bbox_inches="tight", pad_inches=0.1)
     plt.close(fig)
-    print("  OK Fig4_national_pm25_contour")
-
+    print("  OK Fig4_national_pm25_contour (GADM boundaries incl. Taiwan)")
 
 if __name__ == "__main__":
     print("=== contour-filled maps ===")
