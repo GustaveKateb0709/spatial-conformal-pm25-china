@@ -1,0 +1,32 @@
+﻿city_zh,province_en,lat,lon,macro_region_en
+北京,Beijing,39.9042,116.4074,North China
+天津,Tianjin,39.3434,117.3616,North China
+石家庄,Hebei,38.0428,114.5149,North China
+太原,Shanxi,37.8706,112.5489,North China
+呼和浩特,Nei Mongol,40.8415,111.7519,North China
+沈阳,Liaoning,41.8057,123.4315,Northeast China
+长春,Jilin,43.8171,125.3235,Northeast China
+哈尔滨,Heilongjiang,45.8038,126.5350,Northeast China
+上海,Shanghai,31.2304,121.4737,East China
+南京,Jiangsu,32.0603,118.7969,East China
+杭州,Zhejiang,30.2741,120.1551,East China
+合肥,Anhui,31.8206,117.2272,East China
+福州,Fujian,26.0745,119.2965,East China
+南昌,Jiangxi,28.6820,115.8579,East China
+济南,Shandong,36.6512,117.1201,East China
+郑州,Henan,34.7466,113.6254,Central China
+武汉,Hubei,30.5928,114.3055,Central China
+长沙,Hunan,28.2282,112.9388,Central China
+广州,Guangdong,23.1291,113.2644,South China
+南宁,Guangxi,22.8170,108.3665,South China
+海口,Hainan,20.0444,110.1999,South China
+重庆,Chongqing,29.5630,106.5516,Southwest China
+成都,Sichuan,30.5728,104.0668,Southwest China
+贵阳,Guizhou,26.6470,106.6302,Southwest China
+昆明,Yunnan,24.8801,102.8329,Southwest China
+拉萨,Xizang,29.6520,91.1721,Southwest China
+西安,Shaanxi,34.3416,108.9398,Northwest China
+兰州,Gansu,36.0611,103.8343,Northwest China
+西宁,Qinghai,36.6171,101.7782,Northwest China
+银川,Ningxia Hui,38.4872,106.2309,Northwest China
+乌鲁木齐,Xinjiang Uygur,43.8256,87.6168,Northwest China

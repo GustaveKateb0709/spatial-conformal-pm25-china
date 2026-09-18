@@ -1,0 +1,171 @@
+{
+ "thresholds": {
+  "global_lo": 0.85,
+  "global_hi": 0.95,
+  "n_regions_ok": 5,
+  "region_lo": 0.8,
+  "region_hi": 1.0,
+  "worst_min": 0.65
+ },
+ "details": {
+  "A_leave_region_North China": {
+   "n_te": 135,
+   "cov_GSCP": 0.7185185185185186,
+   "cov_sLSCP": 0.7185185185185186,
+   "cov_GBM": 0.48148148148148145,
+   "width_GSCP": 33.649671290393194,
+   "width_sLSCP": 33.649671290393194,
+   "width_GBM": 15.451012807319032
+  },
+  "A_leave_region_Northeast China": {
+   "n_te": 81,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.8395061728395061,
+   "width_GSCP": 53.755009165933494,
+   "width_sLSCP": 53.755009165933494,
+   "width_GBM": 13.642749501592789
+  },
+  "A_leave_region_East China": {
+   "n_te": 189,
+   "cov_GSCP": 0.7936507936507936,
+   "cov_sLSCP": 0.7936507936507936,
+   "cov_GBM": 0.6084656084656085,
+   "width_GSCP": 37.1093377575884,
+   "width_sLSCP": 37.1093377575884,
+   "width_GBM": 14.687266105247076
+  },
+  "A_leave_region_Central China": {
+   "n_te": 81,
+   "cov_GSCP": 0.8395061728395061,
+   "cov_sLSCP": 0.8395061728395061,
+   "cov_GBM": 0.5925925925925926,
+   "width_GSCP": 31.795589552446742,
+   "width_sLSCP": 31.795589552446742,
+   "width_GBM": 14.793861627357927
+  },
+  "A_leave_region_South China": {
+   "n_te": 81,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.2839506172839506,
+   "width_GSCP": 42.64259111225589,
+   "width_sLSCP": 42.64259111225589,
+   "width_GBM": 14.817145087911378
+  },
+  "A_leave_region_Southwest China": {
+   "n_te": 135,
+   "cov_GSCP": 0.9925925925925926,
+   "cov_sLSCP": 0.9925925925925926,
+   "cov_GBM": 0.35555555555555557,
+   "width_GSCP": 40.870012536177,
+   "width_sLSCP": 40.870012536177,
+   "width_GBM": 12.144298597015364
+  },
+  "A_leave_region_Northwest China": {
+   "n_te": 135,
+   "cov_GSCP": 0.8888888888888888,
+   "cov_sLSCP": 0.8888888888888888,
+   "cov_GBM": 0.2962962962962963,
+   "width_GSCP": 46.08222586086101,
+   "width_sLSCP": 46.08222586086101,
+   "width_GBM": 13.147766924816281
+  },
+  "A2_leave_region_recent_North China": {
+   "n_te": 25,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.8,
+   "width_GSCP": 33.64967129039317,
+   "width_sLSCP": 33.64967129039317,
+   "width_GBM": 15.451012807319032
+  },
+  "A2_leave_region_recent_Northeast China": {
+   "n_te": 15,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.9333333333333333,
+   "width_GSCP": 53.755009165933494,
+   "width_sLSCP": 53.755009165933494,
+   "width_GBM": 13.642749501592789
+  },
+  "A2_leave_region_recent_East China": {
+   "n_te": 35,
+   "cov_GSCP": 0.45714285714285713,
+   "cov_sLSCP": 0.45714285714285713,
+   "cov_GBM": 0.5428571428571428,
+   "width_GSCP": 37.10933775758832,
+   "width_sLSCP": 37.10933775758832,
+   "width_GBM": 14.687266105247076
+  },
+  "A2_leave_region_recent_Central China": {
+   "n_te": 15,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 1.0,
+   "width_GSCP": 31.79558955244673,
+   "width_sLSCP": 31.79558955244673,
+   "width_GBM": 14.793861627357927
+  },
+  "A2_leave_region_recent_South China": {
+   "n_te": 15,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.13333333333333333,
+   "width_GSCP": 42.642591112255865,
+   "width_sLSCP": 42.642591112255865,
+   "width_GBM": 14.817145087911378
+  },
+  "A2_leave_region_recent_Southwest China": {
+   "n_te": 25,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.28,
+   "width_GSCP": 40.870012536176866,
+   "width_sLSCP": 40.870012536176866,
+   "width_GBM": 12.144298597015364
+  },
+  "A2_leave_region_recent_Northwest China": {
+   "n_te": 25,
+   "cov_GSCP": 0.88,
+   "cov_sLSCP": 0.88,
+   "cov_GBM": 0.4,
+   "width_GSCP": 46.082225860861,
+   "width_sLSCP": 46.082225860861,
+   "width_GBM": 13.147766924816281
+  },
+  "B_leave_year": {
+   "n_te": 155,
+   "cov_GSCP": 0.7935483870967742,
+   "cov_sLSCP": 0.7935483870967742,
+   "cov_GBM": 0.7483870967741936,
+   "width_GSCP": 25.736257771949347,
+   "width_sLSCP": 25.736257771949347,
+   "width_GBM": 13.7284350796362
+  },
+  "C_Yangtze_Delta": {
+   "n_te": 108,
+   "cov_GSCP": 1.0,
+   "cov_sLSCP": 1.0,
+   "cov_GBM": 0.5,
+   "width_GSCP": 40.19570686601505,
+   "width_sLSCP": 40.19570686601505,
+   "width_GBM": 12.417263388917881
+  }
+ },
+ "mode": "real",
+ "verdict": {
+  "A_pooled_global_cov_sLSCP": 0.8733572281959379,
+  "A_pooled_global_cov_GSCP": 0.8733572281959379,
+  "A_pooled_global_cov_GBM": 0.4862604540023895,
+  "A_unweighted_mean_cov_sLSCP": 0.8904509952129,
+  "A_worst_region_sLSCP": 0.7185185185185186,
+  "A_n_regions_ok_sLSCP": 5,
+  "A_n_regions_ok_GSCP": 5,
+  "A2_pooled_global_cov_sLSCP": 0.8580645161290322,
+  "B_pooled_global_cov_sLSCP": 0.7935483870967742,
+  "B_pooled_global_cov_GSCP": 0.7935483870967742,
+  "H1_met_sLSCP": false,
+  "H2_met_sLSCP": true
+ }
+}

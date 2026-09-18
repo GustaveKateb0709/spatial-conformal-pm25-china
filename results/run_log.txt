@@ -1,0 +1,5 @@
+mode=real
+start=2026-09-18 11:58:02
+n_rows=837
+seed_cal=20260917 seed_model=7 alpha=0.1
+end=2026-09-18 11:58:22
