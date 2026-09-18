@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-10_georeference_stdmap.py — 标准底图地理配准 v2（边界 chamfer 配准）
+10_georeference_stdmap.py — georeference the standard base map (v2, boundary chamfer)
 
-原理：标准底图 GS(2019)1838 上的省界/国界黑线 = 官方界线；GADM 提供同样的
-界线经纬度。将 GADM 界线点经试验变换映射到像素，以"到底图最近暗像元的距离"
-为目标做 Nelder-Mead 优化，收敛即得 lon/lat -> 像素 的精确变换。
+Principle: the province/national boundary lines printed on the standard base map
+GS(2019)1838 are the official boundaries; GADM provides the same boundaries as
+lon/lat. GADM boundary points are mapped to pixels by a trial transform, and
+Nelder-Mead minimises the distance from each mapped point to the nearest dark
+image pixel. At convergence the transform maps lon/lat -> pixels accurately.
 
-变换模型：二次多项式（12 参数）px = f(lon,lat), py = g(lon,lat)。
-输出：data/stdmap_transform_v2.npz + results/stdmap_georef_report.json
+Model: quadratic polynomial (12 parameters) px = f(lon,lat), py = g(lon,lat).
+Output: data/stdmap_transform_v2.npz + results/stdmap_georef_report.json
 """
 import os, json, zipfile
 import numpy as np
@@ -41,7 +43,7 @@ def gadm_boundary_points(step=3):
 
 
 def main():
-    # ---- 底图暗像元掩膜 + 距离变换 ----
+    # ---- dark-pixel mask of the base map + distance transform ----
     g = np.array(Image.open(IMG).convert("L"))
     H, W = g.shape
     dark = g < 140
@@ -52,23 +54,23 @@ def main():
     x0, x1, y0, y1 = cols.min(), cols.max(), rows.min(), rows.max()
     print(f"neatline: x {x0}-{x1}, y {y0}-{y1}")
 
-    # ---- GADM 界线点（子采样）----
+    # ---- GADM boundary points (subsampled) ----
     lon, lat = gadm_boundary_points(step=3)
     rng = np.random.RandomState(0)
     idx = rng.choice(len(lon), size=min(4000, len(lon)), replace=False)
     lon, lat = lon[idx], lat[idx]
     print(f"GADM boundary sample points: {len(lon)}")
 
-    # ---- 初始参数：图廓线性估计（12 槽，完整二次）----
-    # px = a0+a1*lon+a2*lat+a3*lon*lat+a4*lon^2+a5*lat^2 ; py 同构（b 槽）
+    # ---- initial parameters: linear estimate from the neatline (12 slots, full quadratic) ----
+    # px = a0+a1*lon+a2*lat+a3*lon*lat+a4*lon^2+a5*lat^2 ; py likewise (b slots)
     sx = (4557 - 193) / (135 - 75)          # px / deg lon
-    sy = (3189 - 158) / (20 - 50)           # py / deg lat（负）
+    sy = (3189 - 158) / (20 - 50)           # py / deg lat (negative)
     a0 = 193 - 75 * sx
     b2 = sy
     b0 = 3189 - b2 * 20
     p0 = np.array([a0, sx, 0.0, 0.0, 0.0, 0.0, b0, 0.0, b2, 0.0, 0.0, 0.0])
 
-    INSET = dict(x0=int(W * 0.775), y0=int(H * 0.665))     # 南海 insets 区（不绘制）
+    INSET = dict(x0=int(W * 0.775), y0=int(H * 0.665))  # South China Sea inset (never drawn over)
 
     def to_px(lons, lats, p):
         a0, a1, a2, a3, a4, a5, b0, b1, b2, b3, b4, b5 = p
@@ -86,10 +88,10 @@ def main():
 
     def objective(p):
         d = np.sort(dists(p))
-        return float(d[:int(len(d) * 0.85)].mean())   # 截尾 15%，抗文字/经纬网噪声
+        return float(d[:int(len(d) * 0.85)].mean())   # trimmed 15%: robust to text and graticule
 
     print("init objective:", round(objective(p0), 2))
-    # 三段式：仿射 6 参数 -> 双线性 8 参数 -> 完整二次 12 参数
+    # staged: affine (6 params) -> bilinear (8) -> full quadratic (12)
     stages = [6, 8, 12]
     p = p0.copy()
     for n in stages:
