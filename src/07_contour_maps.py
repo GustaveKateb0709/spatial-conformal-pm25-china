@@ -21,21 +21,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NC_FILE = os.path.join(ROOT, "data", "raw", "acag", "2026-09-17", "V6GL03.CNNPM25.AS.201501-201512.nc")
 GADM = os.path.join(ROOT, "data", "raw", "gadm", "2026-09-17", "gadm41_CHN_1.json.zip")
 TWN = os.path.join(ROOT, "data", "raw", "gadm", "2026-09-17", "gadm41_TWN_0.json.zip")
-INSET_IMG = os.path.join(ROOT, "data", "raw", "stdmap_inset_scs.png")
 OUT = os.path.join(ROOT, "figures")
 os.makedirs(OUT, exist_ok=True)
-STD_MAP = os.path.join(ROOT, "data", "raw", "stdmap_GS2019_1838.jpg")
-V2 = np.load(os.path.join(ROOT, "data", "stdmap_transform_v2.npz"))
-V2P = V2["params"]; V2NEAT = V2["neatline"]; V2INSET = dict(x0=float(V2["inset"][0]), y0=float(V2["inset"][1]))
-
-def to_px(LON, LAT):
-    """lon/lat -> standard-base-map pixel coordinates (12-param quadratic, v2)."""
-    LON = np.asarray(LON, float); LAT = np.asarray(LAT, float)
-    a0, a1, a2, a3, a4, a5, b0, b1, b2, b3, b4, b5 = V2P
-    PX = a0 + a1*LON + a2*LAT + a3*LON*LAT + a4*LON*LON + a5*LAT*LAT
-    PY = b0 + b1*LON + b2*LAT + b3*LON*LAT + b4*LON*LON + b5*LAT*LAT
-    return PX, PY
-
 TEAL = "#2C6E7E"
 INK = "#333333"
 
@@ -159,7 +146,7 @@ def fig2():
     plt.close(fig)
     print("  ✅ Fig2_yrd_pm25_contour")
 
-# ==== Fig 4: national contour map (GADM boundaries + Taiwan + SCS inset) ====
+# ==== Fig 4: national contour map (GADM boundaries incl. Taiwan) ====
 def load_twn_outline():
     z = zipfile.ZipFile(TWN)
     gj = json.loads(z.read("gadm41_TWN_0.json"))
@@ -221,23 +208,11 @@ def fig4():
     ax.set_ylabel("Latitude (°N)", fontsize=8)
     ax.set_facecolor("#D0E0F0")  # light blue for the sea
 
-    # South China Sea islands inset (reproduced from the standard base map
-    # GS(2019)1838, bottom-right corner, classic placement)
-    inset = plt.imread(INSET_IMG)
-    ih, iw = inset.shape[0], inset.shape[1]
-    axi_w = 0.235
-    axi_h = axi_w * (ih / iw) * (9.0 / 7.0)
-    axi = fig.add_axes([0.665, 0.045, axi_w, axi_h])
-    axi.imshow(inset)
-    axi.set_xticks([]); axi.set_yticks([])
-    for s in axi.spines.values():
-        s.set_edgecolor(INK); s.set_linewidth(0.8)
-
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "Fig4_national_pm25_contour.png"), dpi=300, bbox_inches="tight", pad_inches=0.1)
     fig.savefig(os.path.join(OUT, "Fig4_national_pm25_contour.pdf"), bbox_inches="tight", pad_inches=0.1)
     plt.close(fig)
-    print("  OK Fig4_national_pm25_contour (GADM + Taiwan + SCS inset)")
+    print("  OK Fig4_national_pm25_contour (GADM boundaries incl. Taiwan)")
 
 if __name__ == "__main__":
     print("=== contour-filled maps ===")
