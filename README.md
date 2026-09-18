@@ -32,7 +32,6 @@ python src/06_sensitivity_analyses.py
 python src/07_contour_maps.py                 # Figures 2 and 4 (contour maps; Figure 4
                                               #   requires the standard base map file)
 python src/09_gp_parameter_diagnostics.py
-python src/10_georeference_stdmap.py          # optional: re-derive the base-map georeference
 ```
 
 `04_run_frozen_analysis.py --real` refuses to run unless a file named
