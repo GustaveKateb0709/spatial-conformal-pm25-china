@@ -4,7 +4,7 @@ Code and frozen results for:
 
 > Wang T.-Y. Preregistered external validation of spatially valid conformal prediction for air-pollution exposure mapping in China.
 
-Preregistration: <https://osf.io/edtwz/>
+Preregistration: <https://osf.io/edhzw/>
 
 ## What this repo contains
 
@@ -41,7 +41,7 @@ the plan-before-results ordering is enforced by the code. For reproduction of th
 published numbers, create that file with two lines:
 
 ```
-registration: https://osf.io/edtwz/
+registration: https://osf.io/edhzw/
 registered: 2026-09-18
 ```
 
