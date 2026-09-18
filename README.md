@@ -2,7 +2,7 @@
 
 Code and frozen results for:
 
-> Wang T.-Y. Where does spatially valid conformal prediction hold? A preregistered external validation and failure diagnosis for air-pollution exposure mapping in China.
+> Wang T.-Y. Preregistered external validation of spatially valid conformal prediction for air-pollution exposure mapping in China.
 
 Preregistration: <https://osf.io/edtwz/>
 
