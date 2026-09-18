@@ -75,6 +75,21 @@ def draw_boundaries(ax, provinces, lw=0.6, ec="#444444"):
             if poly.ndim == 2 and poly.shape[1] >= 2:
                 ax.plot(poly[:, 0], poly[:, 1], color=ec, lw=lw, zorder=3)
 
+def draw_boundaries_hierarchical(ax, provinces, lw_main=1.0, lw_minor=0.35,
+                                 ec_main="#333333", ec_minor="#777777",
+                                 area_thr=0.04):
+    """Mainland/large polygons get the full-weight line; small islands and
+    fragmented coastline get a thinner, lighter line (declutters archipelagos)."""
+    for prov, polys in provinces.items():
+        for poly in polys:
+            if poly.ndim == 2 and poly.shape[1] >= 2:
+                span = (poly[:, 0].max() - poly[:, 0].min()) * \
+                       (poly[:, 1].max() - poly[:, 1].min())
+                if span >= area_thr:
+                    ax.plot(poly[:, 0], poly[:, 1], color=ec_main, lw=lw_main, zorder=3)
+                else:
+                    ax.plot(poly[:, 0], poly[:, 1], color=ec_minor, lw=lw_minor, zorder=3)
+
 def draw_labels(ax, provinces, fontsize=7, box=True):
     for prov, polys in provinces.items():
         all_pts = np.vstack(polys)
@@ -118,8 +133,8 @@ def fig2():
     levels = np.arange(10, 65, 2.5)
     cf = ax.contourf(lon, lat, pm, levels=levels, cmap="Spectral_r", extend="max", zorder=1)
 
-    # YRD province borders (thick)
-    draw_boundaries(ax, yrd_prov, lw=1.0, ec=INK)
+    # YRD province borders (mainland full weight, islands lighter)
+    draw_boundaries_hierarchical(ax, yrd_prov, lw_main=1.0, lw_minor=0.35)
     # YRD province labels
     draw_labels(ax, yrd_prov, fontsize=7.5, box=True)
 
